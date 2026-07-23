@@ -1,0 +1,660 @@
+{
+  "metadata": {
+    "title": "每週市場 Radar",
+    "timezone": "Asia/Hong_Kong",
+    "lastSuccessfulRefresh": "2026-07-23T02:31:54.221Z",
+    "latestCompleteWeek": "2026-07-17",
+    "vixSource": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+    "marketPriceSource": "https://finance.yahoo.com/",
+    "note": "ETF 價格為公開市場資料便利來源；重要結論須再以主要來源核對。"
+  },
+  "snapshots": [
+    {
+      "weekStart": "2026-01-19",
+      "weekEnd": "2026-01-23",
+      "vix": {
+        "high": 20.99,
+        "averageClose": 17.51,
+        "latestClose": 16.09,
+        "status": "green",
+        "sourceDate": "2026-01-23"
+      },
+      "market": {
+        "spy": 689.23,
+        "rsp": 198.77,
+        "qqq": 622.72,
+        "iwm": 264.81,
+        "rspSpy": 0.2884,
+        "iwmQqq": 0.4252,
+        "sourceDate": "2026-01-23"
+      }
+    },
+    {
+      "weekStart": "2026-01-26",
+      "weekEnd": "2026-01-30",
+      "vix": {
+        "high": 19.74,
+        "averageClose": 16.63,
+        "latestClose": 17.44,
+        "status": "green",
+        "sourceDate": "2026-01-30"
+      },
+      "market": {
+        "spy": 691.97,
+        "rsp": 198.08,
+        "qqq": 621.87,
+        "iwm": 259.65,
+        "rspSpy": 0.2863,
+        "iwmQqq": 0.4175,
+        "sourceDate": "2026-01-30"
+      }
+    },
+    {
+      "weekStart": "2026-02-02",
+      "weekEnd": "2026-02-06",
+      "vix": {
+        "high": 23.1,
+        "averageClose": 18.5,
+        "latestClose": 17.76,
+        "status": "green",
+        "sourceDate": "2026-02-06"
+      },
+      "market": {
+        "spy": 690.62,
+        "rsp": 202.26,
+        "qqq": 609.65,
+        "iwm": 265.02,
+        "rspSpy": 0.2929,
+        "iwmQqq": 0.4347,
+        "sourceDate": "2026-02-06"
+      }
+    },
+    {
+      "weekStart": "2026-02-09",
+      "weekEnd": "2026-02-13",
+      "vix": {
+        "high": 22.4,
+        "averageClose": 18.84,
+        "latestClose": 20.6,
+        "status": "green",
+        "sourceDate": "2026-02-13"
+      },
+      "market": {
+        "spy": 681.75,
+        "rsp": 202.87,
+        "qqq": 601.92,
+        "iwm": 262.96,
+        "rspSpy": 0.2976,
+        "iwmQqq": 0.4369,
+        "sourceDate": "2026-02-13"
+      }
+    },
+    {
+      "weekStart": "2026-02-16",
+      "weekEnd": "2026-02-20",
+      "vix": {
+        "high": 22.96,
+        "averageClose": 20.09,
+        "latestClose": 19.09,
+        "status": "green",
+        "sourceDate": "2026-02-20"
+      },
+      "market": {
+        "spy": 689.43,
+        "rsp": 204.09,
+        "qqq": 608.81,
+        "iwm": 264.61,
+        "rspSpy": 0.296,
+        "iwmQqq": 0.4346,
+        "sourceDate": "2026-02-20"
+      }
+    },
+    {
+      "weekStart": "2026-02-23",
+      "weekEnd": "2026-02-27",
+      "vix": {
+        "high": 22.08,
+        "averageClose": 19.4,
+        "latestClose": 19.86,
+        "status": "green",
+        "sourceDate": "2026-02-27"
+      },
+      "market": {
+        "spy": 685.99,
+        "rsp": 204.97,
+        "qqq": 607.29,
+        "iwm": 261.41,
+        "rspSpy": 0.2988,
+        "iwmQqq": 0.4305,
+        "sourceDate": "2026-02-27"
+      }
+    },
+    {
+      "weekStart": "2026-03-02",
+      "weekEnd": "2026-03-06",
+      "vix": {
+        "high": 29.93,
+        "averageClose": 23.88,
+        "latestClose": 29.49,
+        "status": "yellow",
+        "sourceDate": "2026-03-06"
+      },
+      "market": {
+        "spy": 672.38,
+        "rsp": 198.15,
+        "qqq": 599.75,
+        "iwm": 250.89,
+        "rspSpy": 0.2947,
+        "iwmQqq": 0.4183,
+        "sourceDate": "2026-03-06"
+      }
+    },
+    {
+      "weekStart": "2026-03-09",
+      "weekEnd": "2026-03-13",
+      "vix": {
+        "high": 35.3,
+        "averageClose": 25.83,
+        "latestClose": 27.19,
+        "status": "red",
+        "sourceDate": "2026-03-13"
+      },
+      "market": {
+        "spy": 662.29,
+        "rsp": 193.52,
+        "qqq": 593.72,
+        "iwm": 246.59,
+        "rspSpy": 0.2922,
+        "iwmQqq": 0.4153,
+        "sourceDate": "2026-03-13"
+      }
+    },
+    {
+      "weekStart": "2026-03-16",
+      "weekEnd": "2026-03-20",
+      "vix": {
+        "high": 29.28,
+        "averageClose": 24.36,
+        "latestClose": 26.78,
+        "status": "yellow",
+        "sourceDate": "2026-03-20"
+      },
+      "market": {
+        "spy": 648.57,
+        "rsp": 190.48,
+        "qqq": 582.06,
+        "iwm": 242.22,
+        "rspSpy": 0.2937,
+        "iwmQqq": 0.4161,
+        "sourceDate": "2026-03-20"
+      }
+    },
+    {
+      "weekStart": "2026-03-23",
+      "weekEnd": "2026-03-27",
+      "vix": {
+        "high": 31.65,
+        "averageClose": 27.38,
+        "latestClose": 31.05,
+        "status": "red",
+        "sourceDate": "2026-03-27"
+      },
+      "market": {
+        "spy": 634.09,
+        "rsp": 188.46,
+        "qqq": 562.58,
+        "iwm": 243.1,
+        "rspSpy": 0.2972,
+        "iwmQqq": 0.4321,
+        "sourceDate": "2026-03-27"
+      }
+    },
+    {
+      "weekStart": "2026-03-30",
+      "weekEnd": "2026-04-02",
+      "vix": {
+        "high": 31.52,
+        "averageClose": 26.07,
+        "latestClose": 23.87,
+        "status": "red",
+        "sourceDate": "2026-04-02"
+      },
+      "market": {
+        "spy": 655.83,
+        "rsp": 193.09,
+        "qqq": 584.98,
+        "iwm": 251.29,
+        "rspSpy": 0.2944,
+        "iwmQqq": 0.4296,
+        "sourceDate": "2026-04-02"
+      }
+    },
+    {
+      "weekStart": "2026-04-06",
+      "weekEnd": "2026-04-10",
+      "vix": {
+        "high": 28,
+        "averageClose": 21.94,
+        "latestClose": 19.23,
+        "status": "yellow",
+        "sourceDate": "2026-04-10"
+      },
+      "market": {
+        "spy": 679.46,
+        "rsp": 196.65,
+        "qqq": 611.07,
+        "iwm": 261.3,
+        "rspSpy": 0.2894,
+        "iwmQqq": 0.4276,
+        "sourceDate": "2026-04-10"
+      }
+    },
+    {
+      "weekStart": "2026-04-13",
+      "weekEnd": "2026-04-17",
+      "vix": {
+        "high": 21.58,
+        "averageClose": 18.21,
+        "latestClose": 17.48,
+        "status": "green",
+        "sourceDate": "2026-04-17"
+      },
+      "market": {
+        "spy": 710.14,
+        "rsp": 203.16,
+        "qqq": 648.85,
+        "iwm": 275.78,
+        "rspSpy": 0.2861,
+        "iwmQqq": 0.425,
+        "sourceDate": "2026-04-17"
+      }
+    },
+    {
+      "weekStart": "2026-04-20",
+      "weekEnd": "2026-04-24",
+      "vix": {
+        "high": 21.56,
+        "averageClose": 19.06,
+        "latestClose": 18.71,
+        "status": "green",
+        "sourceDate": "2026-04-24"
+      },
+      "market": {
+        "spy": 713.94,
+        "rsp": 202.03,
+        "qqq": 663.88,
+        "iwm": 276.65,
+        "rspSpy": 0.283,
+        "iwmQqq": 0.4167,
+        "sourceDate": "2026-04-24"
+      }
+    },
+    {
+      "weekStart": "2026-04-27",
+      "weekEnd": "2026-05-01",
+      "vix": {
+        "high": 19.43,
+        "averageClose": 17.71,
+        "latestClose": 16.99,
+        "status": "green",
+        "sourceDate": "2026-05-01"
+      },
+      "market": {
+        "spy": 720.65,
+        "rsp": 202.82,
+        "qqq": 674.15,
+        "iwm": 279.28,
+        "rspSpy": 0.2814,
+        "iwmQqq": 0.4143,
+        "sourceDate": "2026-05-01"
+      }
+    },
+    {
+      "weekStart": "2026-05-04",
+      "weekEnd": "2026-05-08",
+      "vix": {
+        "high": 19.08,
+        "averageClose": 17.47,
+        "latestClose": 17.19,
+        "status": "green",
+        "sourceDate": "2026-05-08"
+      },
+      "market": {
+        "spy": 737.62,
+        "rsp": 204.1,
+        "qqq": 711.23,
+        "iwm": 284.17,
+        "rspSpy": 0.2767,
+        "iwmQqq": 0.3995,
+        "sourceDate": "2026-05-08"
+      }
+    },
+    {
+      "weekStart": "2026-05-11",
+      "weekEnd": "2026-05-15",
+      "vix": {
+        "high": 19.27,
+        "averageClose": 17.99,
+        "latestClose": 18.43,
+        "status": "green",
+        "sourceDate": "2026-05-15"
+      },
+      "market": {
+        "spy": 739.17,
+        "rsp": 201.56,
+        "qqq": 708.93,
+        "iwm": 277.6,
+        "rspSpy": 0.2727,
+        "iwmQqq": 0.3916,
+        "sourceDate": "2026-05-15"
+      }
+    },
+    {
+      "weekStart": "2026-05-18",
+      "weekEnd": "2026-05-22",
+      "vix": {
+        "high": 19.44,
+        "averageClose": 17.36,
+        "latestClose": 16.7,
+        "status": "green",
+        "sourceDate": "2026-05-22"
+      },
+      "market": {
+        "spy": 745.64,
+        "rsp": 206.58,
+        "qqq": 717.54,
+        "iwm": 285.12,
+        "rspSpy": 0.2771,
+        "iwmQqq": 0.3974,
+        "sourceDate": "2026-05-22"
+      }
+    },
+    {
+      "weekStart": "2026-05-25",
+      "weekEnd": "2026-05-29",
+      "vix": {
+        "high": 17.23,
+        "averageClose": 16.19,
+        "latestClose": 15.32,
+        "status": "green",
+        "sourceDate": "2026-05-29"
+      },
+      "market": {
+        "spy": 756.48,
+        "rsp": 208.83,
+        "qqq": 738.31,
+        "iwm": 290.43,
+        "rspSpy": 0.2761,
+        "iwmQqq": 0.3934,
+        "sourceDate": "2026-05-29"
+      }
+    },
+    {
+      "weekStart": "2026-06-01",
+      "weekEnd": "2026-06-05",
+      "vix": {
+        "high": 21.57,
+        "averageClose": 16.96,
+        "latestClose": 21.51,
+        "status": "green",
+        "sourceDate": "2026-06-05"
+      },
+      "market": {
+        "spy": 737.55,
+        "rsp": 207.83,
+        "qqq": 705.06,
+        "iwm": 281.65,
+        "rspSpy": 0.2818,
+        "iwmQqq": 0.3995,
+        "sourceDate": "2026-06-05"
+      }
+    },
+    {
+      "weekStart": "2026-06-08",
+      "weekEnd": "2026-06-12",
+      "vix": {
+        "high": 23.34,
+        "averageClose": 19.63,
+        "latestClose": 17.68,
+        "status": "green",
+        "sourceDate": "2026-06-12"
+      },
+      "market": {
+        "spy": 741.75,
+        "rsp": 211.65,
+        "qqq": 721.34,
+        "iwm": 292.95,
+        "rspSpy": 0.2853,
+        "iwmQqq": 0.4061,
+        "sourceDate": "2026-06-12"
+      }
+    },
+    {
+      "weekStart": "2026-06-15",
+      "weekEnd": "2026-06-19",
+      "vix": {
+        "high": 18.84,
+        "averageClose": 16.85,
+        "latestClose": 16.78,
+        "status": "green",
+        "sourceDate": "2026-06-19"
+      },
+      "market": {
+        "spy": 746.74,
+        "rsp": 209.96,
+        "qqq": 740.62,
+        "iwm": 295.59,
+        "rspSpy": 0.2812,
+        "iwmQqq": 0.3991,
+        "sourceDate": "2026-06-19"
+      }
+    },
+    {
+      "weekStart": "2026-06-22",
+      "weekEnd": "2026-06-26",
+      "vix": {
+        "high": 20.72,
+        "averageClose": 18.54,
+        "latestClose": 18.41,
+        "status": "green",
+        "sourceDate": "2026-06-26"
+      },
+      "market": {
+        "spy": 728.99,
+        "rsp": 210.31,
+        "qqq": 706.52,
+        "iwm": 299.83,
+        "rspSpy": 0.2885,
+        "iwmQqq": 0.4244,
+        "sourceDate": "2026-06-26"
+      }
+    },
+    {
+      "weekStart": "2026-06-29",
+      "weekEnd": "2026-07-03",
+      "vix": {
+        "high": 19.45,
+        "averageClose": 16.53,
+        "latestClose": 15.81,
+        "status": "green",
+        "sourceDate": "2026-07-03"
+      },
+      "market": {
+        "spy": 744.78,
+        "rsp": 214.91,
+        "qqq": 712.6,
+        "iwm": 297.58,
+        "rspSpy": 0.2886,
+        "iwmQqq": 0.4176,
+        "sourceDate": "2026-07-03"
+      }
+    },
+    {
+      "weekStart": "2026-07-06",
+      "weekEnd": "2026-07-10",
+      "vix": {
+        "high": 18.91,
+        "averageClose": 15.89,
+        "latestClose": 15.03,
+        "status": "green",
+        "sourceDate": "2026-07-10"
+      },
+      "market": {
+        "spy": 754.95,
+        "rsp": 214.3,
+        "qqq": 725.51,
+        "iwm": 295.99,
+        "rspSpy": 0.2839,
+        "iwmQqq": 0.408,
+        "sourceDate": "2026-07-10"
+      }
+    },
+    {
+      "weekStart": "2026-07-13",
+      "weekEnd": "2026-07-17",
+      "vix": {
+        "high": 19.5,
+        "averageClose": 16.97,
+        "latestClose": 18.77,
+        "status": "green",
+        "sourceDate": "2026-07-17"
+      },
+      "market": {
+        "spy": 743.29,
+        "rsp": 213.37,
+        "qqq": 695.33,
+        "iwm": 294.04,
+        "rspSpy": 0.2871,
+        "iwmQqq": 0.4229,
+        "sourceDate": "2026-07-17",
+        "weeklyChange": {
+          "spy": -1.54,
+          "rsp": -0.43,
+          "qqq": -4.16,
+          "iwm": -0.66
+        }
+      },
+      "bubbleScore": {
+        "score": 4,
+        "availableMaximum": 10,
+        "fullMaximum": 15,
+        "stage": "正常",
+        "coverage": "5/6 量化指標已有可核對數據",
+        "definition": "缺少 Put/Call 及質化資料不當作零分；4 分只代表已量度部分。"
+      },
+      "breadthStatus": "yellow",
+      "indicators": [
+        {
+          "group": "市場結構",
+          "name": "VIX 與市場高位",
+          "value": "週高 19.50",
+          "status": "green",
+          "score": 0,
+          "date": "2026-07-17",
+          "definition": "VIX 未接近 27；不代表沒有其他市場風險。",
+          "source": "https://www.cboe.com/tradable-products/vix"
+        },
+        {
+          "group": "市場結構",
+          "name": "市場廣度",
+          "value": "53.5% 高於 50 日線",
+          "status": "yellow",
+          "score": 1,
+          "date": "2026-07-17",
+          "definition": "涵蓋美國股票範圍，並非只限 S&P 500；屬中性而非全面擴散。",
+          "source": "https://thetrading.tools/breadth/above-moving-average"
+        },
+        {
+          "group": "市場結構",
+          "name": "Margin Debt",
+          "value": "US$1.416T（2026-05）",
+          "status": "red",
+          "score": 2,
+          "date": "2026-05-31",
+          "definition": "約按月 +8.6%、按年 +53.7%；月度資料有發布時差。",
+          "source": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics"
+        },
+        {
+          "group": "市場結構",
+          "name": "IPO 活躍度",
+          "value": "Q2：48 宗／US$104.8B",
+          "status": "yellow",
+          "score": 1,
+          "date": "2026-06-30",
+          "definition": "集資額創紀錄，宗數未核實超過五年平均 1.5 倍，故不評紅色。",
+          "source": "https://www.renaissancecapital.com/IPO-Center/News/120034/Updated-Renaissance-Capitals-2Q-2026-US-IPO-Market-Review"
+        },
+        {
+          "group": "市場結構",
+          "name": "SPY 三個月升幅",
+          "value": "+4.67%",
+          "status": "green",
+          "score": 0,
+          "date": "2026-07-17",
+          "definition": "由 2026-04-17 至 2026-07-17 的周末收市值計算。",
+          "source": "https://finance.yahoo.com/quote/SPY/history/"
+        },
+        {
+          "group": "市場結構",
+          "name": "Equity Put/Call",
+          "value": "待更新",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "沒有可靠同週數值，不納入分數。",
+          "source": "https://www.cboe.com/us/options/market_statistics/"
+        },
+        {
+          "group": "基本面",
+          "name": "非 Mega-cap 盈利支持",
+          "value": "Q2 預期 +22.8%",
+          "status": "green",
+          "score": null,
+          "date": "2026-07-20",
+          "definition": "FactSet 彙總的 S&P 500 非 Magnificent Seven 盈利增長預期；不是已公布結果。",
+          "source": "https://www.kiplinger.com/investing/stocks/stock-market-today-stocks-fall-to-start-a-big-week-of-earnings-072026"
+        },
+        {
+          "group": "基本面",
+          "name": "科技估值",
+          "value": "待核對",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "下次更新補充一致口徑的預期市盈率及歷史百分位。",
+          "source": null
+        },
+        {
+          "group": "基本面",
+          "name": "AI CapEx／收入／現金流",
+          "value": "待核對",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "只採公司披露或可交叉核對的彙總。",
+          "source": null
+        },
+        {
+          "group": "宏觀",
+          "name": "孳息曲線與信用",
+          "value": "待更新",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "下次更新加入 10Y/2Y、10Y/3M 與 High-yield spread。",
+          "source": "https://fred.stlouisfed.org/"
+        },
+        {
+          "group": "宏觀",
+          "name": "板塊輪動、油價及通脹",
+          "value": "待更新",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "缺資料時保持空白，不以新聞形容詞代替數字。",
+          "source": "https://fred.stlouisfed.org/"
+        }
+      ]
+    }
+  ]
+}
