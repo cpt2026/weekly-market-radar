@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 
 type Status = "green" | "yellow" | "red" | "unknown";
 type Snapshot = {
@@ -17,7 +17,7 @@ type Snapshot = {
   indicators?: Indicator[];
 };
 type Indicator = { group: string; name: string; value: string; status: Status; score: number | null; date: string | null; definition: string; source: string | null };
-type RadarData = { metadata: { lastSuccessfulRefresh: string; latestCompleteWeek: string; vixSource: string; marketPriceSource: string; note: string }; snapshots: Snapshot[] };
+export type RadarData = { metadata: { lastSuccessfulRefresh: string; latestCompleteWeek: string; vixSource: string; marketPriceSource: string; note: string }; snapshots: Snapshot[] };
 
 const LABEL: Record<Status, string> = { green: "正常", yellow: "留意", red: "警戒", unknown: "待更新" };
 const RANGES = [13, 26, 52, 0] as const;
@@ -28,6 +28,15 @@ function fmtDate(date: string) {
 
 function StatusBadge({ status }: { status: Status }) {
   return <span className={`status status-${status}`}><i />{LABEL[status]}</span>;
+}
+
+function InfoBubble({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <details className="info-bubble">
+      <summary aria-label={`查看${label}詳情`}>i</summary>
+      <div className="info-popover" role="tooltip"><strong>{label}</strong>{children}</div>
+    </details>
+  );
 }
 
 function Source({ date, definition, href }: { date?: string | null; definition: string; href?: string | null }) {
@@ -68,6 +77,10 @@ function VixChart({ rows }: { rows: Snapshot[] }) {
         <text className="threshold-label" x={width - 2} y={y(27) - 5}>接近 30：27</text>
         <text className="threshold-label danger" x={width - 2} y={y(30) - 5}>警戒：30</text>
         {paths.map(([key, values, color]) => <path key={key} d={linePath(values, width, height, min, max)} fill="none" stroke={color} strokeWidth={key === "high" ? 3 : 2} />)}
+        {rows.map((row, index) => {
+          const x = rows.length === 1 ? width / 2 : (index / (rows.length - 1)) * width;
+          return <circle key={row.weekStart} className="chart-point" cx={x} cy={y(row.vix.high)} r="4" tabIndex={0}><title>{`${fmtDate(row.weekEnd)}｜週高 ${row.vix.high.toFixed(2)}｜平均 ${row.vix.averageClose.toFixed(2)}｜最後 ${row.vix.latestClose.toFixed(2)}`}</title></circle>;
+        })}
         <text className="axis" x="0" y={height + 25}>{fmtDate(rows[0].weekEnd)}</text>
         <text className="axis" textAnchor="end" x={width} y={height + 25}>{fmtDate(rows.at(-1)!.weekEnd)}</text>
       </svg>
@@ -107,6 +120,15 @@ export default function Dashboard({ data }: { data: RadarData }) {
   const groups = ["市場結構", "基本面", "宏觀"];
   const vixChanged = latest.vix.status !== previous.vix.status;
   const change = latest.market.weeklyChange ?? {};
+  const margin = indicators.find((item) => item.name === "Margin Debt");
+  const ipo = indicators.find((item) => item.name === "IPO 活躍度");
+  const weeklyMove = (row: Snapshot, key: "spy" | "rsp" | "qqq" | "iwm") => {
+    const index = data.snapshots.findIndex((item) => item.weekStart === row.weekStart);
+    const prior = data.snapshots[index - 1]?.market[key];
+    const current = row.market[key];
+    return current && prior ? ((current / prior) - 1) * 100 : null;
+  };
+  const moveText = (value: number | null | undefined) => value == null ? "—" : `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
 
   return (
     <main>
@@ -115,11 +137,17 @@ export default function Dashboard({ data }: { data: RadarData }) {
         <div className="hero-row"><div><h1>每週市場 Radar</h1><p>辨認風險累積，不預測短期升跌。</p></div><div className="update"><span>最後成功更新</span><strong>{fmtDate(data.metadata.latestCompleteWeek)}</strong><small>香港時間 · 上一完整交易週</small></div></div>
       </header>
 
+      <section className="market-tape" aria-label="最新市場收市及週變化">
+        {(["spy", "rsp", "qqq", "iwm"] as const).map((key) => <div key={key}><span>{key.toUpperCase()}</span><strong>{latest.market[key]?.toFixed(2)}</strong><em className={(change[key] ?? 0) >= 0 ? "up" : "down"}>{moveText(change[key])}</em><InfoBubble label={`${key.toUpperCase()} 週變化`}><p>上一完整交易週最後收市值及相對前週變化。</p><small>資料日期 {fmtDate(latest.market.sourceDate)}</small></InfoBubble></div>)}
+      </section>
+
       <section className="kpi-grid" aria-label="市場摘要">
-        <article className="kpi"><span>市場階段</span><strong>{score.stage}</strong><small>已量度部分仍屬正常區</small></article>
-        <article className="kpi"><span>泡沫分數</span><strong>{score.score}<em> / {score.fullMaximum}</em></strong><small>{score.coverage}</small></article>
-        <article className="kpi kpi-vix"><div><span>VIX 週高</span><strong>{latest.vix.high.toFixed(2)}</strong></div><StatusBadge status={latest.vix.status} /><small>平均 {latest.vix.averageClose.toFixed(2)} · 最後 {latest.vix.latestClose.toFixed(2)}</small></article>
-        <article className="kpi"><span>市場廣度</span><strong>中性</strong><StatusBadge status={latest.breadthStatus ?? "unknown"} /><small>等權重及小型股本週相對抗跌</small></article>
+        <article className="kpi"><div className="kpi-label"><span>市場階段</span><InfoBubble label="市場階段"><p>依泡沫分數區間判定；缺失資料不當作安全零分。</p></InfoBubble></div><strong>{score.stage}</strong><small>已量度部分仍屬正常區</small></article>
+        <article className="kpi"><div className="kpi-label"><span>泡沫分數</span><InfoBubble label="泡沫分數"><p>{score.definition}</p><small>{score.coverage}</small></InfoBubble></div><strong>{score.score}<em> / {score.fullMaximum}</em></strong><small>可量度上限 {score.availableMaximum}</small></article>
+        <article className="kpi"><div className="kpi-label"><span>VIX 週高</span><InfoBubble label="VIX 週高"><p>該週每日 VIX 日內高位的最大值；27 黃、30 紅。</p><small>平均 {latest.vix.averageClose.toFixed(2)} · 最後 {latest.vix.latestClose.toFixed(2)}</small></InfoBubble></div><strong>{latest.vix.high.toFixed(2)}</strong><StatusBadge status={latest.vix.status} /><small>距離 27：{(27 - latest.vix.high).toFixed(2)}</small></article>
+        <article className="kpi"><div className="kpi-label"><span>市場廣度</span><InfoBubble label="市場廣度"><p>53.5% 美國股票高於 50 日線；股票範圍並非只限 S&amp;P 500。</p></InfoBubble></div><strong>中性</strong><StatusBadge status={latest.breadthStatus ?? "unknown"} /><small>等權重及小型股相對抗跌</small></article>
+        <article className="kpi"><div className="kpi-label"><span>Margin Debt</span><InfoBubble label="Margin Debt"><p>{margin?.definition}</p><small>{margin?.date ? fmtDate(margin.date) : "待更新"}</small></InfoBubble></div><strong>{margin?.value.replace("（2026-05）", "") ?? "—"}</strong><StatusBadge status={margin?.status ?? "unknown"} /><small>最新月份 2026-05</small></article>
+        <article className="kpi"><div className="kpi-label"><span>IPO</span><InfoBubble label="IPO 活躍度"><p>{ipo?.definition}</p><small>{ipo?.date ? fmtDate(ipo.date) : "待更新"}</small></InfoBubble></div><strong>48<em> 宗</em></strong><StatusBadge status={ipo?.status ?? "unknown"} /><small>Q2 集資 US$104.8B</small></article>
       </section>
 
       <aside className={`notice ${vixChanged ? "notice-alert" : ""}`}><strong>{vixChanged ? "VIX 狀態有變" : "VIX 狀態未變"}</strong><span>本週最高 {latest.vix.high.toFixed(2)}，距離黃色參考線 27 尚有 {(27 - latest.vix.high).toFixed(2)} 點。警告只反映規則，不是買賣建議。</span></aside>
@@ -156,12 +184,12 @@ export default function Dashboard({ data }: { data: RadarData }) {
 
       {groups.map((group, index) => <section className="panel wide" key={group}>
         <div className="section-head"><div><span className="section-index">{String(index + 5).padStart(2, "0")}</span><h2>{group}</h2><p>{group === "市場結構" ? "槓桿、IPO、廣度與動能。" : group === "基本面" ? "估值是否仍有盈利與現金流支持。" : "利率、信用、商品與通脹環境。"}</p></div></div>
-        <div className="indicator-grid">{indicators.filter((item) => item.group === group).map((item) => <article className="indicator" key={item.name}><div><span>{item.name}</span><StatusBadge status={item.status} /></div><strong>{item.value}</strong>{item.score !== null && <small>泡沫分數 +{item.score}</small>}<Source date={item.date} definition={item.definition} href={item.source} /></article>)}</div>
+        <div className="indicator-grid">{indicators.filter((item) => item.group === group).map((item) => <article className="indicator" key={item.name}><div><span>{item.name}</span><div className="indicator-actions"><StatusBadge status={item.status} /><InfoBubble label={item.name}><p>{item.definition}</p>{item.date && <small>資料日期：{fmtDate(item.date)}</small>}{item.source ? <a href={item.source} target="_blank" rel="noreferrer">原始來源 ↗</a> : <small>沒有足夠可靠數據。</small>}</InfoBubble></div></div><strong>{item.value}</strong><div className="indicator-meta"><small>{item.score !== null ? `泡沫分數 +${item.score}` : "不計分"}</small><small>{item.date ? fmtDate(item.date) : "待核對"}</small></div></article>)}</div>
       </section>)}
 
       <section className="panel wide">
         <div className="section-head history-head"><div><span className="section-index">08</span><h2>歷史紀錄</h2><p>同一週重跑會更新原紀錄，不會新增重複星期。</p></div><div className="filters" aria-label="歷史範圍">{RANGES.map((value) => <button key={value} className={range === value ? "active" : ""} onClick={() => setRange(value)}>{value || "全部"}{value ? "週" : ""}</button>)}</div></div>
-        <div className="table-wrap"><table><thead><tr><th>交易週結束</th><th>VIX 週高</th><th>平均</th><th>最後</th><th>RSP/SPY</th><th>IWM/QQQ</th><th>狀態</th></tr></thead><tbody>{[...rows].reverse().map((row) => <tr key={row.weekStart}><td>{fmtDate(row.weekEnd)}</td><td>{row.vix.high.toFixed(2)}</td><td>{row.vix.averageClose.toFixed(2)}</td><td>{row.vix.latestClose.toFixed(2)}</td><td>{row.market.rspSpy?.toFixed(4) ?? "—"}</td><td>{row.market.iwmQqq?.toFixed(4) ?? "—"}</td><td><StatusBadge status={row.vix.status} /></td></tr>)}</tbody></table></div>
+        <div className="table-wrap"><table><thead><tr><th>交易週結束</th><th>VIX 高／均／末</th><th>SPY 週</th><th>RSP 週</th><th>QQQ 週</th><th>IWM 週</th><th>RSP/SPY</th><th>IWM/QQQ</th><th>狀態</th></tr></thead><tbody>{[...rows].reverse().map((row) => <tr key={row.weekStart}><td>{fmtDate(row.weekEnd)}</td><td title={`週高 ${row.vix.high.toFixed(2)}｜平均 ${row.vix.averageClose.toFixed(2)}｜最後 ${row.vix.latestClose.toFixed(2)}`}><strong>{row.vix.high.toFixed(2)}</strong> / {row.vix.averageClose.toFixed(2)} / {row.vix.latestClose.toFixed(2)}</td><td>{moveText(weeklyMove(row, "spy"))}</td><td>{moveText(weeklyMove(row, "rsp"))}</td><td>{moveText(weeklyMove(row, "qqq"))}</td><td>{moveText(weeklyMove(row, "iwm"))}</td><td>{row.market.rspSpy?.toFixed(4) ?? "—"}</td><td>{row.market.iwmQqq?.toFixed(4) ?? "—"}</td><td><StatusBadge status={row.vix.status} /></td></tr>)}</tbody></table></div>
       </section>
 
       <footer><strong>每週市場 Radar</strong><p>只供資料監察與教育用途，不構成投資建議。資料可能延遲；作出決定前請核對原始來源。</p><span>公開唯讀版本 · noindex · 最後完整週 {data.metadata.latestCompleteWeek}</span></footer>

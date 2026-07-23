@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cpt2026.github.io/weekly-market-radar/";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "每週市場 Radar",
   description: "每週更新的市場風險、VIX、廣度、基本面與宏觀監察 Dashboard。",
   robots: { index: false, follow: false, nocache: true },

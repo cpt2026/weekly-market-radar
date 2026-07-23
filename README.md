@@ -1,6 +1,6 @@
 # 每週市場 Radar
 
-公開唯讀的每週市場風險 Dashboard，使用 ChatGPT Sites 託管。本機檔案是唯一資料來源；網站沒有資料庫、登入或編輯功能。
+公開唯讀的每週市場風險 Dashboard，使用 GitHub Pages 託管。本機檔案是唯一資料來源；網站沒有資料庫、登入或編輯功能。
 
 ## 日常使用
 
@@ -15,6 +15,8 @@
 - `data/weekly_snapshots.json`：已驗證歷史快照
 - `scripts/refresh-market-data.mjs`：可重跑的 VIX／ETF 更新程式
 - `app/`：Dashboard 網站
-- `.openai/hosting.json`：固定 Sites 專案連接
+- `.github/workflows/deploy-pages.yml`：推送至 `main` 後自動測試、建置及發佈
+
+首次 GitHub Pages 發佈成功前，`.openai/hosting.json` 只保留作現有 ChatGPT Sites 網站的不中斷後備；遷移完成後不再用它發佈。
 
 若資料、測試或建置失敗，不應發佈；正式網站會保留上一個成功版本。

@@ -1,6 +1,6 @@
 import data from "../data/weekly_snapshots.json";
-import Dashboard from "./Dashboard";
+import Dashboard, { type RadarData } from "./Dashboard";
 
 export default function Home() {
-  return <Dashboard data={data} />;
+  return <Dashboard data={data as RadarData} />;
 }

@@ -20,3 +20,10 @@ test("dashboard source includes noindex and no private paths", async () => {
   assert.match(layout, /index: false/);
   assert.doesNotMatch(`${layout}\n${dashboard}`, /\/Users\/|sk-[a-zA-Z0-9]/);
 });
+
+test("static GitHub Pages output is self-contained", async () => {
+  const html = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
+  assert.match(html, /每週市場 Radar/);
+  assert.match(html, /noindex/);
+  assert.doesNotMatch(html, /\/Users\/|sk-[a-zA-Z0-9]/);
+});
