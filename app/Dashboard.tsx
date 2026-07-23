@@ -335,7 +335,7 @@ export default function Dashboard({ data }: { data: RadarData }) {
       </section>
 
       <DetailSheet active={activeDetail} onClose={() => setActiveDetail(null)} />
-      <footer><strong>每週市場 Radar</strong><p>只供資料監察與教育用途，不構成投資建議。資料可能延遲；作出決定前請核對原始來源。</p><span>公開唯讀版本 · noindex · 最後完整週 {data.metadata.latestCompleteWeek}</span></footer>
+      <footer><strong>Radar</strong><p>只供資料監察與教育用途，不構成投資建議。資料可能延遲；作出決定前請核對原始來源。</p><span>公開唯讀版本 · noindex · 最後完整週 {data.metadata.latestCompleteWeek}</span></footer>
     </main>
   );
 }

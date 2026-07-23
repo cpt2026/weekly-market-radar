@@ -1,4 +1,4 @@
-# 每週市場 Radar
+# Radar
 
 公開唯讀的每週市場風險 Dashboard，使用 GitHub Pages 託管。本機檔案是唯一資料來源；網站沒有資料庫、登入或編輯功能。
 

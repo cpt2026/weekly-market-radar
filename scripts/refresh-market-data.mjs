@@ -124,7 +124,7 @@ async function main() {
 
   const result = {
     metadata: {
-      title: "每週市場 Radar",
+      title: "Radar",
       timezone: "Asia/Hong_Kong",
       lastSuccessfulRefresh: new Date().toISOString(),
       latestCompleteWeek: snapshots.at(-1).weekEnd,
