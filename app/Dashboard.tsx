@@ -176,6 +176,9 @@ function indicatorDetail(item: Indicator): Detail {
 export default function Dashboard({ data }: { data: RadarData }) {
   const [range, setRange] = useState<(typeof RANGES)[number]>(13);
   const [activeDetail, setActiveDetail] = useState<{ label: string; detail: Detail } | null>(null);
+  const [unlocked, setUnlocked] = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [passcodeError, setPasscodeError] = useState("");
   const rows = useMemo(() => range ? data.snapshots.slice(-range) : data.snapshots, [data.snapshots, range]);
   const latest = data.snapshots.at(-1)!;
   const previous = data.snapshots.at(-2)!;
@@ -218,6 +221,57 @@ export default function Dashboard({ data }: { data: RadarData }) {
     theory: "市值加權指數可被少數 mega-cap 推動；等權重和小型股相對表現提供另一個市場參與度視角。",
     references: [REFS.equalWeight, ...(indicators.find((item) => item.name === "市場廣度")?.source ? [{ label: "本期廣度數據來源", href: indicators.find((item) => item.name === "市場廣度")!.source! }] : [])],
   };
+  useEffect(() => {
+    if (!unlocked) return;
+    let timer = window.setTimeout(lock, 10_000);
+    let lastReset = 0;
+    function lock() {
+      setUnlocked(false);
+      setActiveDetail(null);
+      setPasscode("");
+    }
+    function activity() {
+      const now = Date.now();
+      if (now - lastReset < 250) return;
+      lastReset = now;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(lock, 10_000);
+    }
+    const events = ["mousemove", "pointermove", "pointerdown", "keydown", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, activity, { passive: true }));
+    const visibility = () => document.hidden && lock();
+    document.addEventListener("visibilitychange", visibility);
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((event) => window.removeEventListener(event, activity));
+      document.removeEventListener("visibilitychange", visibility);
+    };
+  }, [unlocked]);
+
+  if (!unlocked) {
+    return (
+      <main className="lock-shell">
+        <form className="lock-card" onSubmit={(event) => {
+          event.preventDefault();
+          if (passcode === "0000") {
+            setPasscodeError("");
+            setPasscode("");
+            setUnlocked(true);
+          } else {
+            setPasscodeError("密碼不正確");
+          }
+        }}>
+          <span className="lock-eyebrow">WEEKLY MARKET RISK MONITOR</span>
+          <h1>輸入密碼</h1>
+          <p>內容會在連續 10 秒沒有操作後自動隱藏。</p>
+          <label htmlFor="radar-passcode">4 位數字密碼</label>
+          <input id="radar-passcode" type="password" inputMode="numeric" pattern="[0-9]*" maxLength={4} autoComplete="off" autoFocus value={passcode} aria-invalid={Boolean(passcodeError)} aria-describedby="passcode-message" onChange={(event) => { setPasscode(event.target.value.replace(/\D/g, "").slice(0, 4)); setPasscodeError(""); }} />
+          <button type="submit">開啟 Dashboard</button>
+          <span id="passcode-message" className={passcodeError ? "lock-error" : "lock-note"} aria-live="polite">{passcodeError || "滑鼠移動、點擊、鍵盤、捲動及觸控均視為操作。"}</span>
+        </form>
+      </main>
+    );
+  }
 
   return (
     <main>

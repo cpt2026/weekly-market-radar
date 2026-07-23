@@ -18,10 +18,13 @@ test("dashboard source includes noindex and no private paths", async () => {
   const dashboard = await readFile(new URL("../app/Dashboard.tsx", import.meta.url), "utf8");
   const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(dashboard, /每週市場 Radar/);
-  assert.doesNotMatch(dashboard, /<h1>/);
+  assert.doesNotMatch(dashboard, /<h1>每週市場 Radar/);
   assert.match(dashboard, /計分邏輯/);
   assert.match(dashboard, /背景理論/);
   assert.match(dashboard, /支持參考/);
+  assert.match(dashboard, /passcode === "0000"/);
+  assert.match(dashboard, /window\.setTimeout\(lock, 10_000\)/);
+  assert.match(dashboard, /"mousemove", "pointermove", "pointerdown", "keydown", "scroll", "touchstart"/);
   assert.match(styles, /\.info-bubble:hover \.info-popover/);
   assert.doesNotMatch(styles, /\.info-bubble\[open\]/);
   assert.match(layout, /index: false/);
