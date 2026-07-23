@@ -25,5 +25,6 @@ test("static GitHub Pages output is self-contained", async () => {
   const html = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
   assert.match(html, /每週市場 Radar/);
   assert.match(html, /noindex/);
+  if (process.env.PAGES_BASE_PATH) assert.match(html, /\/weekly-market-radar\/favicon\.svg/);
   assert.doesNotMatch(html, /\/Users\/|sk-[a-zA-Z0-9]/);
 });

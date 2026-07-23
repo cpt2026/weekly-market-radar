@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cpt2026.github.io/weekly-market-radar/";
+const basePath = process.env.PAGES_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: { card: "summary_large_image", images: ["/radar-social-preview.png"] },
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: { icon: `${basePath}/favicon.svg`, shortcut: `${basePath}/favicon.svg` },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
