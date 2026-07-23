@@ -16,7 +16,14 @@ test("weekly snapshots are unique and VIX statuses follow thresholds", async () 
 test("dashboard source includes noindex and no private paths", async () => {
   const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
   const dashboard = await readFile(new URL("../app/Dashboard.tsx", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(dashboard, /每週市場 Radar/);
+  assert.doesNotMatch(dashboard, /<h1>/);
+  assert.match(dashboard, /計分邏輯/);
+  assert.match(dashboard, /背景理論/);
+  assert.match(dashboard, /支持參考/);
+  assert.match(styles, /\.info-bubble:hover \.info-popover/);
+  assert.doesNotMatch(styles, /\.info-bubble\[open\]/);
   assert.match(layout, /index: false/);
   assert.doesNotMatch(`${layout}\n${dashboard}`, /\/Users\/|sk-[a-zA-Z0-9]/);
 });
