@@ -17,7 +17,7 @@ type Snapshot = {
   breadthStatus?: Status;
   indicators?: Indicator[];
 };
-type Indicator = { group: string; name: string; value: string; status: Status; score: number | null; date: string | null; definition: string; source: string | null };
+type Indicator = { group: string; name: string; value: string; status: Status; score: number | null; date: string | null; definition: string; source: string | null; crossCheck?: string | null };
 type Detail = {
   summary: string;
   logic: string;
@@ -168,7 +168,7 @@ function indicatorDetail(item: Indicator): Detail {
     "板塊輪動、油價及通脹": { theory: "輪動可顯示升市是否擴散；油價會影響通脹與企業成本，但傳導受需求、匯率及基數效應影響。", reference: REFS.fred },
   };
   const background = specific[item.name] ?? { theory: "此項用作交叉檢查市場風險，必須與價格、盈利及宏觀資料一併解讀。", reference: REFS.fred };
-  const references = [background.reference, ...(item.source ? [{ label: "本期數據來源", href: item.source }] : [])].filter((reference, index, all) => all.findIndex((candidate) => candidate.href === reference.href) === index);
+  const references = [background.reference, ...(item.source ? [{ label: "本期數據來源", href: item.source }] : []), ...(item.crossCheck ? [{ label: "交叉核對", href: item.crossCheck }] : [])].filter((reference, index, all) => all.findIndex((candidate) => candidate.href === reference.href) === index);
   return {
     summary: `${item.value}。${item.definition}`,
     logic: item.score === null ? "目前不計入泡沫總分；資料不足或此項仍屬質化交叉核對。" : `本週按已核對規則計 +${item.score} 分。狀態為「${LABEL[item.status]}」；門檻由 radar_parameters.md 管理。`,
@@ -194,6 +194,7 @@ export default function Dashboard({ data }: { data: RadarData }) {
   const change = latest.market.weeklyChange ?? {};
   const margin = indicators.find((item) => item.name === "Margin Debt");
   const ipo = indicators.find((item) => item.name === "IPO 活躍度");
+  const breadth = indicators.find((item) => item.name === "市場廣度");
   const weeklyMove = (row: Snapshot, key: "spy" | "rsp" | "qqq" | "iwm") => {
     const index = data.snapshots.findIndex((item) => item.weekStart === row.weekStart);
     const prior = data.snapshots[index - 1]?.market[key];
@@ -299,9 +300,9 @@ export default function Dashboard({ data }: { data: RadarData }) {
         <article className="kpi"><div className="kpi-label"><span>市場階段</span><InfoBubble label="市場階段" detail={scoreDetail} onOpen={openDetail}><p>依泡沫分數區間判定；缺失資料不當作安全零分。</p><small>點擊查看完整計分框架</small></InfoBubble></div><strong>{score.stage}</strong><small>已量度部分仍屬正常區</small></article>
         <article className="kpi"><div className="kpi-label"><span>泡沫分數</span><InfoBubble label="泡沫分數" detail={scoreDetail} onOpen={openDetail}><p>{score.definition}</p><small>{score.coverage} · 點擊看理論</small></InfoBubble></div><strong>{score.score}<em> / {score.fullMaximum}</em></strong><small>可量度上限 {score.availableMaximum}</small></article>
         <article className="kpi"><div className="kpi-label"><span>VIX 週高</span><InfoBubble label="VIX 週高" detail={vixDetail} onOpen={openDetail}><p>週內日中最高值；27 黃、30 紅。</p><small>平均 {latest.vix.averageClose.toFixed(2)} · 最後 {latest.vix.latestClose.toFixed(2)} · 點擊看方法</small></InfoBubble></div><strong>{latest.vix.high.toFixed(2)}</strong><StatusBadge status={latest.vix.status} /><small>距離 27：{(27 - latest.vix.high).toFixed(2)}</small></article>
-        <article className="kpi"><div className="kpi-label"><span>市場廣度</span><InfoBubble label="市場廣度" detail={breadthDetail} onOpen={openDetail}><p>53.5% 美國股票高於 50 日線，並比較等權重與小型股。</p><small>點擊查看廣度理論</small></InfoBubble></div><strong>中性</strong><StatusBadge status={latest.breadthStatus ?? "unknown"} /><small>等權重及小型股相對抗跌</small></article>
-        <article className="kpi"><div className="kpi-label"><span>Margin Debt</span><InfoBubble label="Margin Debt" detail={margin ? indicatorDetail(margin) : scoreDetail} onOpen={openDetail}><p>{margin?.definition}</p><small>{margin?.date ? fmtDate(margin.date) : "待更新"} · 點擊看理論</small></InfoBubble></div><strong>{margin?.value.replace("（2026-05）", "") ?? "—"}</strong><StatusBadge status={margin?.status ?? "unknown"} /><small>最新月份 2026-05</small></article>
-        <article className="kpi"><div className="kpi-label"><span>IPO</span><InfoBubble label="IPO 活躍度" detail={ipo ? indicatorDetail(ipo) : scoreDetail} onOpen={openDetail}><p>{ipo?.definition}</p><small>{ipo?.date ? fmtDate(ipo.date) : "待更新"} · 點擊看理論</small></InfoBubble></div><strong>48<em> 宗</em></strong><StatusBadge status={ipo?.status ?? "unknown"} /><small>Q2 集資 US$104.8B</small></article>
+        <article className="kpi"><div className="kpi-label"><span>市場廣度</span><InfoBubble label="市場廣度" detail={breadthDetail} onOpen={openDetail}><p>{breadth?.definition}</p><small>點擊查看廣度理論</small></InfoBubble></div><strong>{breadth?.value ?? "—"}</strong><StatusBadge status={breadth?.status ?? "unknown"} /><small>{breadth?.date ? fmtDate(breadth.date) : "待更新"}</small></article>
+        <article className="kpi"><div className="kpi-label"><span>Margin Debt</span><InfoBubble label="Margin Debt" detail={margin ? indicatorDetail(margin) : scoreDetail} onOpen={openDetail}><p>{margin?.definition}</p><small>{margin?.date ? fmtDate(margin.date) : "待更新"} · 點擊看理論</small></InfoBubble></div><strong>{margin?.value ?? "—"}</strong><StatusBadge status={margin?.status ?? "unknown"} /><small>{margin?.date ? `最新月份 ${margin.date.slice(0, 7)}` : "待更新"}</small></article>
+        <article className="kpi"><div className="kpi-label"><span>IPO</span><InfoBubble label="IPO 活躍度" detail={ipo ? indicatorDetail(ipo) : scoreDetail} onOpen={openDetail}><p>{ipo?.definition}</p><small>{ipo?.date ? fmtDate(ipo.date) : "待更新"} · 點擊看理論</small></InfoBubble></div><strong>{ipo?.value ?? "—"}</strong><StatusBadge status={ipo?.status ?? "unknown"} /><small>{ipo?.date ? fmtDate(ipo.date) : "待更新"}</small></article>
       </section>
 
       <aside className={`notice ${vixChanged ? "notice-alert" : ""}`}><strong>{vixChanged ? "VIX 狀態有變" : "VIX 狀態未變"}</strong><span>本週最高 {latest.vix.high.toFixed(2)}，距離黃色參考線 27 尚有 {(27 - latest.vix.high).toFixed(2)} 點。警告只反映規則，不是買賣建議。</span></aside>

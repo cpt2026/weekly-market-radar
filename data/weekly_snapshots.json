@@ -2,33 +2,13 @@
   "metadata": {
     "title": "Radar",
     "timezone": "Asia/Hong_Kong",
-    "lastSuccessfulRefresh": "2026-07-23T02:31:54.221Z",
-    "latestCompleteWeek": "2026-07-17",
+    "lastSuccessfulRefresh": "2026-07-27T01:25:33.916Z",
+    "latestCompleteWeek": "2026-07-24",
     "vixSource": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
     "marketPriceSource": "https://finance.yahoo.com/",
     "note": "ETF 價格為公開市場資料便利來源；重要結論須再以主要來源核對。"
   },
   "snapshots": [
-    {
-      "weekStart": "2026-01-19",
-      "weekEnd": "2026-01-23",
-      "vix": {
-        "high": 20.99,
-        "averageClose": 17.51,
-        "latestClose": 16.09,
-        "status": "green",
-        "sourceDate": "2026-01-23"
-      },
-      "market": {
-        "spy": 689.23,
-        "rsp": 198.77,
-        "qqq": 622.72,
-        "iwm": 264.81,
-        "rspSpy": 0.2884,
-        "iwmQqq": 0.4252,
-        "sourceDate": "2026-01-23"
-      }
-    },
     {
       "weekStart": "2026-01-26",
       "weekEnd": "2026-01-30",
@@ -653,6 +633,219 @@
           "date": null,
           "definition": "缺資料時保持空白，不以新聞形容詞代替數字。",
           "source": "https://fred.stlouisfed.org/"
+        }
+      ]
+    },
+    {
+      "weekStart": "2026-07-20",
+      "weekEnd": "2026-07-24",
+      "vix": {
+        "high": 20.31,
+        "averageClose": 17.92,
+        "latestClose": 18.58,
+        "status": "green",
+        "sourceDate": "2026-07-24"
+      },
+      "market": {
+        "spy": 738.93,
+        "rsp": 213.57,
+        "qqq": 684.23,
+        "iwm": 291.17,
+        "rspSpy": 0.289,
+        "iwmQqq": 0.4255,
+        "sourceDate": "2026-07-24",
+        "weeklyChange": {
+          "spy": -0.59,
+          "rsp": 0.09,
+          "qqq": -1.6,
+          "iwm": -0.98
+        }
+      },
+      "bubbleScore": {
+        "score": 3,
+        "availableMaximum": 11,
+        "fullMaximum": 15,
+        "stage": "正常",
+        "coverage": "5/6 量化指標及 1/3 質化指標已有可核對數據（73%）",
+        "definition": "Margin Debt +2、IPO +1，其餘已核對項目 +0；缺少同範圍的 50／200 日廣度組合及兩項質化資料，不當作零分。"
+      },
+      "breadthStatus": "unknown",
+      "indicators": [
+        {
+          "group": "市場結構",
+          "name": "VIX 與市場高位",
+          "value": "週高 20.31／均 17.92／末 18.58",
+          "status": "green",
+          "score": 0,
+          "date": "2026-07-24",
+          "definition": "Cboe 五個交易日數據計算；週高低於 27。FRED VIXCLS 已核對 7 月 20 至 23 日收市值，7 月 24 日尚未更新。",
+          "source": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+          "crossCheck": "https://fred.stlouisfed.org/series/VIXCLS"
+        },
+        {
+          "group": "市場結構",
+          "name": "Equity Put/Call",
+          "value": "0.79",
+          "status": "green",
+          "score": 0,
+          "date": "2026-07-24",
+          "definition": "Cboe-only equity options 每日成交量 Put/Call；全市場 Cboe 頁面的 0.85 屬不同交易所範圍，只作合理性核對，不直接比較。",
+          "source": "https://www.cboe.com/data/mktstat.aspx",
+          "crossCheck": "https://www.cboe.com/us/options/market_statistics/market/"
+        },
+        {
+          "group": "市場結構",
+          "name": "市場廣度",
+          "value": "200 日線近 70%；50 日線待更新",
+          "status": "unknown",
+          "score": null,
+          "date": "2026-07-20",
+          "definition": "約 70% 指 S&P 500 成份股高於 200 日線；未取得同一股票範圍及日期的 50 日線比例，故不計泡沫分。RSP/SPY 及 IWM/QQQ 本週均改善，只作方向交叉核對。",
+          "source": "https://www.kiplinger.com/investing/stocks/dow-drops-305-points-as-apple-falls-from-highs-stock-market-today",
+          "crossCheck": "https://www.spglobal.com/spdji/en/indices/equity/sp-500-equal-weight-index/"
+        },
+        {
+          "group": "市場結構",
+          "name": "Margin Debt",
+          "value": "US$1.502T（2026-06）",
+          "status": "red",
+          "score": 2,
+          "date": "2026-06-30",
+          "definition": "FINRA 客戶證券孖展帳戶借方餘額，按月 +6.1%、按年 +49.0%；月度資料通常於翌月第三週發布。",
+          "source": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics",
+          "crossCheck": "https://www.finra.org/rules-guidance/guidance/faqs/margin-balance-reporting"
+        },
+        {
+          "group": "市場結構",
+          "name": "IPO 活躍度",
+          "value": "Q2：48 宗／US$104.8B",
+          "status": "yellow",
+          "score": 1,
+          "date": "2026-06-30",
+          "definition": "Renaissance Capital 的美國 IPO 口徑；集資額偏熱，惟季度首日平均回報待更新，因此只評黃色、不評紅色。",
+          "source": "https://www.renaissancecapital.com/IPO-Center/News/120034/Updated-Renaissance-Capitals-2Q-2026-US-IPO-Market-Review",
+          "crossCheck": "https://www.sec.gov/data-research/statistics-data-visualizations/initial-public-offerings-ipos"
+        },
+        {
+          "group": "市場結構",
+          "name": "SPY 三個月升幅",
+          "value": "+3.50%",
+          "status": "green",
+          "score": 0,
+          "date": "2026-07-24",
+          "definition": "以 2026-04-24 至 2026-07-24 收市值計算；本週 SPY -0.59%，未見價格急速加速。",
+          "source": "https://finance.yahoo.com/quote/SPY/history/",
+          "crossCheck": "https://www.ssga.com/us/en/intermediary/etfs/state-street-spdr-sp-500-etf-trust-spy"
+        },
+        {
+          "group": "市場結構",
+          "name": "科技集中度",
+          "value": "XLK 首三大 35.2%",
+          "status": "yellow",
+          "score": null,
+          "date": "2026-07-23",
+          "definition": "State Street 公布的 XLK 指數權重：NVIDIA 14.11%、Apple 13.18%、Microsoft 7.91%；只代表科技板塊內集中度。",
+          "source": "https://www.ssga.com/us/en/institutional/etfs/state-street-technology-select-sector-spdr-etf-xlk",
+          "crossCheck": "https://www.spglobal.com/spdji/en/indices/equity/sp-500-information-technology-sector/"
+        },
+        {
+          "group": "基本面",
+          "name": "非 Mega-cap 盈利支持",
+          "value": "S&P 500 Q2 +37.9%；剔除 Alphabet +25.9%",
+          "status": "green",
+          "score": null,
+          "date": "2026-07-24",
+          "definition": "FactSet blended 盈利增長，27% 成份股已公布；剔除 Alphabet 並不等同剔除全部 Mega-cap，故不直接沿用為非 Mega-cap 全體數字。",
+          "source": "https://insight.factset.com/sp-500-earnings-season-update-july-24-2026",
+          "crossCheck": "https://www.spglobal.com/spdji/en/indices/equity/sp-500/"
+        },
+        {
+          "group": "基本面",
+          "name": "科技估值",
+          "value": "XLK FY1 P/E 28.32×",
+          "status": "yellow",
+          "score": null,
+          "date": "2026-07-22",
+          "definition": "Technology Select Sector Index 預期一年市盈率；3–5 年 EPS 增長估算 31.70%，估值偏高但仍有盈利增長支持。S&P 500 的 20.1× 屬不同範圍，只作背景核對。",
+          "source": "https://www.ssga.com/us/en/institutional/etfs/state-street-technology-select-sector-spdr-etf-xlk",
+          "crossCheck": "https://insight.factset.com/sp-500-earnings-season-update-july-24-2026"
+        },
+        {
+          "group": "基本面",
+          "name": "AI CapEx／收入／現金流",
+          "value": "待更新",
+          "status": "unknown",
+          "score": null,
+          "date": null,
+          "definition": "本週大型平台公司 Q2 申報尚未齊全，無法以同一季度、同一會計口徑核對 CapEx／收入／自由現金流，故不沿用舊數或評分。",
+          "source": "https://www.sec.gov/edgar/search/",
+          "crossCheck": null
+        },
+        {
+          "group": "宏觀",
+          "name": "孳息曲線",
+          "value": "10Y–2Y +34bp；10Y–3M +76bp",
+          "status": "green",
+          "score": null,
+          "date": "2026-07-23",
+          "definition": "美國國債固定年期收益率：10Y 4.71%、2Y 4.37%、3M 3.95%；兩條曲線均為正斜率。",
+          "source": "https://fred.stlouisfed.org/series/DGS10",
+          "crossCheck": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve"
+        },
+        {
+          "group": "宏觀",
+          "name": "High-yield 信用利差",
+          "value": "2.77%",
+          "status": "green",
+          "score": null,
+          "date": "2026-07-23",
+          "definition": "ICE BofA US High Yield Index option-adjusted spread，每日收市、非經季節調整；利差仍窄，但不能解讀為沒有信用風險。",
+          "source": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+          "crossCheck": "https://www.ice.com/market-data/indices/fixed-income-indices"
+        },
+        {
+          "group": "宏觀",
+          "name": "股債關係與實質利率",
+          "value": "SPY -0.59%／TLT -1.50%；10Y real 2.43%",
+          "status": "yellow",
+          "score": null,
+          "date": "2026-07-24",
+          "definition": "股票及長債 ETF 為 7 月 17 至 24 日收市變化；10 年實質利率為 FRED 7 月 23 日數值，日期不同，不直接計算相關性。",
+          "source": "https://fred.stlouisfed.org/series/DFII10",
+          "crossCheck": "https://finance.yahoo.com/quote/TLT/history/"
+        },
+        {
+          "group": "宏觀",
+          "name": "板塊輪動",
+          "value": "能源 +3.36%／公用 +2.48%／工業 +1.81%",
+          "status": "green",
+          "score": null,
+          "date": "2026-07-24",
+          "definition": "Sector SPDR 週收市變化；非必需消費 -5.22%、通訊 -3.93%，領先板塊不只科技。ETF 報價與 S&P 500 sector dashboard 作方向核對。",
+          "source": "https://www.spglobal.com/spdji/en/landing/investment-themes/sectors/",
+          "crossCheck": "https://finance.yahoo.com/markets/stocks/sector/"
+        },
+        {
+          "group": "宏觀",
+          "name": "WTI 油價",
+          "value": "US$84.38／桶",
+          "status": "yellow",
+          "score": null,
+          "date": "2026-07-20",
+          "definition": "FRED 的 EIA WTI Cushing 現貨日價；官方序列只更新至週一，沒有把較後新聞報價混入同一比較。",
+          "source": "https://fred.stlouisfed.org/series/DCOILWTICO",
+          "crossCheck": "https://www.eia.gov/petroleum/"
+        },
+        {
+          "group": "宏觀",
+          "name": "通脹趨勢",
+          "value": "CPI +3.5% YoY；核心 +2.6%",
+          "status": "yellow",
+          "score": null,
+          "date": "2026-06-30",
+          "definition": "BLS 2026 年 6 月 CPI-U 十二個月變化；核心為扣除食品及能源，屬月度數據，不與 7 月油價作同期直接比較。",
+          "source": "https://www.bls.gov/news.release/cpi.htm",
+          "crossCheck": "https://fred.stlouisfed.org/series/CPIAUCSL"
         }
       ]
     }
