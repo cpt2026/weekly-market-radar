@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { buildValueAlert } from "../lib/value-alert.mjs";
 
 test("weekly snapshots are unique and VIX statuses follow thresholds", async () => {
   const data = JSON.parse(await readFile(new URL("../data/weekly_snapshots.json", import.meta.url)));
@@ -13,6 +14,13 @@ test("weekly snapshots are unique and VIX statuses follow thresholds", async () 
   assert.equal(data.snapshots.at(-1).weekEnd, data.metadata.latestCompleteWeek);
 });
 
+test("value alert requires coverage and a critical red for full red status", () => {
+  const item = (name, status) => ({ name, status, value: name });
+  assert.equal(buildValueAlert([item("Margin Debt", "red"), item("IPO 活躍度", "yellow")]).status, "unknown");
+  assert.equal(buildValueAlert([item("Margin Debt", "red"), item("IPO 活躍度", "yellow"), item("市場廣度", "yellow")]).status, "yellow");
+  assert.equal(buildValueAlert([item("Margin Debt", "red"), item("科技估值", "red"), item("市場廣度", "green")]).status, "red");
+});
+
 test("dashboard source includes noindex and no private paths", async () => {
   const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
   const dashboard = await readFile(new URL("../app/Dashboard.tsx", import.meta.url), "utf8");
@@ -22,6 +30,7 @@ test("dashboard source includes noindex and no private paths", async () => {
   assert.match(dashboard, /計分邏輯/);
   assert.match(dashboard, /背景理論/);
   assert.match(dashboard, /支持參考/);
+  assert.match(dashboard, /非理性市場警報/);
   assert.match(dashboard, /passcode === "0000"/);
   assert.match(dashboard, /window\.setTimeout\(lock, 10_000\)/);
   assert.match(dashboard, /"mousemove", "pointermove", "pointerdown", "keydown", "scroll", "touchstart"/);

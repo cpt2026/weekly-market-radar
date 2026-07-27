@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { buildValueAlert } from "@/lib/value-alert.mjs";
 
 type Status = "green" | "yellow" | "red" | "unknown";
 type Snapshot = {
@@ -147,6 +148,9 @@ const REFS = {
   yieldCurve: { label: "New York Fed：Yield Curve Leading Indicator", href: "https://www.newyorkfed.org/research/capital_markets/ycfaq" },
   fred: { label: "Federal Reserve Economic Data（FRED）", href: "https://fred.stlouisfed.org/" },
   filings: { label: "SEC EDGAR：公司申報文件", href: "https://www.sec.gov/edgar/search/" },
+  diversification: { label: "FINRA：資產配置與分散投資", href: "https://www.finra.org/investors/investing/investing-basics/asset-allocation-diversification" },
+  volatility: { label: "FINRA：市場波動與長期投資", href: "https://www.finra.org/investors/investing/investing-basics/volatility" },
+  crash1929: { label: "Federal Reserve History：1929 股災", href: "https://www.federalreservehistory.org/essays/stock-market-crash-of-1929" },
 };
 
 function indicatorDetail(item: Indicator): Detail {
@@ -184,6 +188,7 @@ export default function Dashboard({ data }: { data: RadarData }) {
   const previous = data.snapshots.at(-2)!;
   const score = latest.bubbleScore!;
   const indicators = latest.indicators ?? [];
+  const valueAlert = buildValueAlert(indicators);
   const groups = ["市場結構", "基本面", "宏觀"];
   const vixChanged = latest.vix.status !== previous.vix.status;
   const change = latest.market.weeklyChange ?? {};
@@ -220,6 +225,12 @@ export default function Dashboard({ data }: { data: RadarData }) {
     logic: "本週市場廣度計 +1 分並顯示黃色；比率熱圖只顯示改善或轉弱方向，本身不重複計分。",
     theory: "市值加權指數可被少數 mega-cap 推動；等權重和小型股相對表現提供另一個市場參與度視角。",
     references: [REFS.equalWeight, ...(indicators.find((item) => item.name === "市場廣度")?.source ? [{ label: "本期廣度數據來源", href: indicators.find((item) => item.name === "市場廣度")!.source! }] : [])],
+  };
+  const valueAlertDetail: Detail = {
+    summary: `目前為「${LABEL[valueAlert.status]}」，可核對 ${valueAlert.known}/${valueAlert.total} 個面向，風險分 ${valueAlert.score}/10。灰色面向不當作安全零分。`,
+    logic: "五個面向各按綠 0、黃 1、紅 2 計算。少於 3 個有可靠資料為灰；有 1 紅或至少 2 黃為黃；至少 2 紅且包括估值或現金流脫節才為紅。只在整體轉變或新增關鍵紅色時提醒。",
+    theory: "價格是 Mr. Market 的報價，不等於內在價值。泡沫較常同時出現高估值、槓桿、熱門發行、狹窄升市與敘事缺乏現金流支持；但非理性可維持很久，因此本框架用於風險預算、估值覆核與避免被迫賣出，不用於猜頂、槓桿做空或頻繁交易。",
+    references: [REFS.filings, REFS.margin, REFS.ipo, REFS.diversification, REFS.volatility, REFS.crash1929],
   };
   useEffect(() => {
     if (!unlocked) return;
@@ -295,21 +306,29 @@ export default function Dashboard({ data }: { data: RadarData }) {
 
       <aside className={`notice ${vixChanged ? "notice-alert" : ""}`}><strong>{vixChanged ? "VIX 狀態有變" : "VIX 狀態未變"}</strong><span>本週最高 {latest.vix.high.toFixed(2)}，距離黃色參考線 27 尚有 {(27 - latest.vix.high).toFixed(2)} 點。警告只反映規則，不是買賣建議。</span></aside>
 
+      <section className={`panel wide value-alert value-alert-${valueAlert.status}`}>
+        <div className="section-head"><div><span className="section-index">01</span><h2>非理性市場警報</h2><p>為長期價值投資者檢查價格、槓桿、投機、現金流及集中風險。</p></div><StatusBadge status={valueAlert.status} /></div>
+        <div className="value-alert-summary"><strong>{LABEL[valueAlert.status]}</strong><span>風險分 {valueAlert.score}/10 · 資料 {valueAlert.known}/{valueAlert.total}</span><p>{valueAlert.status === "unknown" ? "可靠資料不足，暫不判斷市場是否非理性。" : valueAlert.status === "red" ? "估值或現金流脫節與其他紅色風險同時出現；先覆核持倉，不代表立即清倉。" : valueAlert.status === "yellow" ? "已有風險累積，但未形成全面泡沫證據；重做估值並避免追價或加槓桿。" : "未見多項風險同時升溫；仍按原定估值與資產配置紀律投資。"}</p></div>
+        <div className="value-signal-grid">{valueAlert.signals.map((signal) => <div key={signal.name}><span>{signal.name}</span><StatusBadge status={signal.status} /><strong>{signal.evidence}</strong></div>)}</div>
+        <div className="value-discipline"><strong>長期投資者回應</strong><span>重做內在價值範圍 · 檢查論點失效條件 · 控制單一公司／主題集中度 · 保留應急現金 · 不猜頂、不槓桿做空、不因單一警號頻繁交易</span></div>
+        <button className="detail-link" type="button" onClick={() => openDetail("非理性市場警報", valueAlertDetail)}>計分、背景理論與支持參考 →</button>
+      </section>
+
       <div className="insight-grid">
         <section className="panel vix-panel">
-          <div className="section-head"><div><span className="section-index">01</span><h2>VIX 壓力雷達</h2><p>週高、平均與最後收市。</p></div><StatusBadge status={latest.vix.status} /></div>
+          <div className="section-head"><div><span className="section-index">02</span><h2>VIX 壓力雷達</h2><p>週高、平均與最後收市。</p></div><StatusBadge status={latest.vix.status} /></div>
           <VixChart rows={rows} />
           <button className="detail-link" type="button" onClick={() => openDetail("VIX 壓力雷達", vixDetail)}>計分、理論與來源 →</button>
         </section>
         <section className="panel score-panel">
-          <div className="section-head"><div><span className="section-index">02</span><h2>泡沫分數</h2><p>分數歷史由首個完整核對週開始累積。</p></div></div>
+          <div className="section-head"><div><span className="section-index">03</span><h2>泡沫分數</h2><p>分數歷史由首個完整核對週開始累積。</p></div></div>
           <div className="score-scale" aria-label={`泡沫分數 ${score.score} 分`}><div className="scale-zones"><i /><i /><i /><i /><i /></div><span style={{ left: `${(score.score / score.fullMaximum) * 100}%` }}>{score.score}</span></div>
           <div className="scale-labels"><span>正常 0–4</span><span>留意 5–7</span><span>上升 8–10</span><span>亢奮 11–13</span><span>危急 14–15</span></div>
           <p className="callout">目前可核對項目得 {score.score}/{score.availableMaximum}；缺失項目沒有當作零分，因此此值不等同完整的 {score.fullMaximum} 分評估。</p>
           <button className="detail-link" type="button" onClick={() => openDetail("泡沫分數", scoreDetail)}>計分、理論與來源 →</button>
         </section>
         <section className="panel">
-          <div className="section-head"><div><span className="section-index">03</span><h2>市場結構</h2><p>比較市值加權與較廣泛市場的相對表現。</p></div></div>
+          <div className="section-head"><div><span className="section-index">04</span><h2>市場結構</h2><p>比較市值加權與較廣泛市場的相對表現。</p></div></div>
           <div className="ratio-grid">
             <div><span>RSP / SPY</span><strong>{latest.market.rspSpy?.toFixed(4)}</strong><small>本週 RSP {change.rsp?.toFixed(2)}% · SPY {change.spy?.toFixed(2)}%</small><Sparkline values={rows.map((row) => row.market.rspSpy ?? 0)} /></div>
             <div><span>IWM / QQQ</span><strong>{latest.market.iwmQqq?.toFixed(4)}</strong><small>本週 IWM {change.iwm?.toFixed(2)}% · QQQ {change.qqq?.toFixed(2)}%</small><Sparkline values={rows.map((row) => row.market.iwmQqq ?? 0)} /></div>
@@ -319,18 +338,18 @@ export default function Dashboard({ data }: { data: RadarData }) {
       </div>
 
       <section className="panel wide">
-        <div className="section-head"><div><span className="section-index">04</span><h2>指標熱圖</h2><p>綠、黃、紅只表示規則狀態；灰色代表資料不足。</p></div></div>
+        <div className="section-head"><div><span className="section-index">05</span><h2>指標熱圖</h2><p>綠、黃、紅只表示規則狀態；灰色代表資料不足。</p></div></div>
         <Heatmap rows={data.snapshots} />
         <Source definition="VIX 依 27／30 規則；兩個市場比率以相對上週改善／轉弱顯示。比率熱圖是方向提示，不納入泡沫分數。" />
       </section>
 
       {groups.map((group, index) => <section className="panel wide" key={group}>
-        <div className="section-head"><div><span className="section-index">{String(index + 5).padStart(2, "0")}</span><h2>{group}</h2><p>{group === "市場結構" ? "槓桿、IPO、廣度與動能。" : group === "基本面" ? "估值是否仍有盈利與現金流支持。" : "利率、信用、商品與通脹環境。"}</p></div></div>
+        <div className="section-head"><div><span className="section-index">{String(index + 6).padStart(2, "0")}</span><h2>{group}</h2><p>{group === "市場結構" ? "槓桿、IPO、廣度與動能。" : group === "基本面" ? "估值是否仍有盈利與現金流支持。" : "利率、信用、商品與通脹環境。"}</p></div></div>
         <div className="indicator-grid">{indicators.filter((item) => item.group === group).map((item) => <article className="indicator" key={item.name}><div><span>{item.name}</span><div className="indicator-actions"><StatusBadge status={item.status} /><InfoBubble label={item.name} detail={indicatorDetail(item)} onOpen={openDetail}><p>{item.definition}</p>{item.date && <small>資料日期：{fmtDate(item.date)}</small>}<small>點擊查看計分、理論與來源</small></InfoBubble></div></div><strong>{item.value}</strong><div className="indicator-meta"><small>{item.score !== null ? `泡沫分數 +${item.score}` : "不計分"}</small><small>{item.date ? fmtDate(item.date) : "待核對"}</small></div></article>)}</div>
       </section>)}
 
       <section className="panel wide">
-        <div className="section-head history-head"><div><span className="section-index">08</span><h2>歷史紀錄</h2><p>同一週重跑會更新原紀錄，不會新增重複星期。</p></div><div className="filters" aria-label="歷史範圍">{RANGES.map((value) => <button key={value} className={range === value ? "active" : ""} onClick={() => setRange(value)}>{value || "全部"}{value ? "週" : ""}</button>)}</div></div>
+        <div className="section-head history-head"><div><span className="section-index">09</span><h2>歷史紀錄</h2><p>同一週重跑會更新原紀錄，不會新增重複星期。</p></div><div className="filters" aria-label="歷史範圍">{RANGES.map((value) => <button key={value} className={range === value ? "active" : ""} onClick={() => setRange(value)}>{value || "全部"}{value ? "週" : ""}</button>)}</div></div>
         <div className="table-wrap"><table><thead><tr><th>交易週結束</th><th>VIX 高／均／末</th><th>SPY 週</th><th>RSP 週</th><th>QQQ 週</th><th>IWM 週</th><th>RSP/SPY</th><th>IWM/QQQ</th><th>狀態</th></tr></thead><tbody>{[...rows].reverse().map((row) => <tr key={row.weekStart}><td>{fmtDate(row.weekEnd)}</td><td title={`週高 ${row.vix.high.toFixed(2)}｜平均 ${row.vix.averageClose.toFixed(2)}｜最後 ${row.vix.latestClose.toFixed(2)}`}><strong>{row.vix.high.toFixed(2)}</strong> / {row.vix.averageClose.toFixed(2)} / {row.vix.latestClose.toFixed(2)}</td><td>{moveText(weeklyMove(row, "spy"))}</td><td>{moveText(weeklyMove(row, "rsp"))}</td><td>{moveText(weeklyMove(row, "qqq"))}</td><td>{moveText(weeklyMove(row, "iwm"))}</td><td>{row.market.rspSpy?.toFixed(4) ?? "—"}</td><td>{row.market.iwmQqq?.toFixed(4) ?? "—"}</td><td><StatusBadge status={row.vix.status} /></td></tr>)}</tbody></table></div>
       </section>
 
