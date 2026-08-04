@@ -223,7 +223,7 @@ export default function Dashboard({ data }: { data: RadarData }) {
   };
   const breadthDetail: Detail = {
     summary: "以高於 50 日線的股票比例、RSP/SPY 及 IWM/QQQ 交叉觀察升市參與度。",
-    logic: "本週市場廣度計 +1 分並顯示黃色；比率熱圖只顯示改善或轉弱方向，本身不重複計分。",
+    logic: breadth?.score == null ? "同範圍同日期數據不足，本週不計泡沫分；比率熱圖只顯示方向。" : `本週市場廣度計 +${breadth.score} 分；比率熱圖只顯示方向，不重複計分。`,
     theory: "市值加權指數可被少數 mega-cap 推動；等權重和小型股相對表現提供另一個市場參與度視角。",
     references: [REFS.equalWeight, ...(indicators.find((item) => item.name === "市場廣度")?.source ? [{ label: "本期廣度數據來源", href: indicators.find((item) => item.name === "市場廣度")!.source! }] : [])],
   };
